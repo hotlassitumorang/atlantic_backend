@@ -1,19 +1,37 @@
 import * as admin from "firebase-admin";
 import path from "path";
+import { ServiceAccount } from "firebase-admin/app";
 
-// 1. Import your downloaded service account key
-//    Make sure the path is correct
-const serviceAccountPath = path.join(
-    __dirname,
-    "../config/firebase_config.json"
-);
+// This will hold our credential config
+let serviceAccount: string | ServiceAccount;
+
+// 1. Check if we are in production (on Vercel)
+if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+    // We are in production: decode the Base64 string
+    console.log("Loading Firebase credentials from environment variable.");
+    const decodedString = Buffer.from(
+        process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
+        'base64'
+    ).toString('utf8');
+    serviceAccount = JSON.parse(decodedString) as ServiceAccount;
+
+} else {
+    // We are in local development: use the file path
+    console.log("Loading Firebase credentials from local file.");
+    serviceAccount = path.join(
+        __dirname,
+        "../config/firebase_config.json" // Using your local path
+    );
+}
 
 // 2. Initialize the Firebase Admin SDK
 try {
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccountPath),
-        // ❗️ Find this in your Firebase Console -> Realtime Database
-        databaseURL: "https://ph-monitor-5bd12-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        // This 'serviceAccount' variable works for both cases
+        credential: admin.credential.cert(serviceAccount),
+
+        // 3. IMPORTANT: Use an environment variable for your URL
+        databaseURL: process.env.FIREBASE_DATABASE_URL
     });
     console.log("Firebase Admin SDK initialized.");
 } catch (error: any) {
