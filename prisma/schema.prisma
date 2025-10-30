@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+}
+
+model DataLog {
+  id                Int      @id @default(autoincrement())
+  createdAt         DateTime @default(now())
+  
+  // ESP32 Sensor Data
+  voltage           Float
+  current           Float
+  power             Float
+  energy            Float
+  water_temperature Float
+  humidity          Float
+  ph                Float
+  nutrient_ppm      Float
+
+  // This explicitly maps your model 'DataLog' to the table 'data_logs'
+  @@map("data_logs")
+}

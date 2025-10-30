@@ -1,0 +1,15 @@
+-- CreateTable
+CREATE TABLE "data_logs" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "voltage" DOUBLE PRECISION NOT NULL,
+    "current" DOUBLE PRECISION NOT NULL,
+    "power" DOUBLE PRECISION NOT NULL,
+    "energy" DOUBLE PRECISION NOT NULL,
+    "water_temperature" DOUBLE PRECISION NOT NULL,
+    "humidity" DOUBLE PRECISION NOT NULL,
+    "ph" DOUBLE PRECISION NOT NULL,
+    "nutrient_ppm" DOUBLE PRECISION NOT NULL,
+
+    CONSTRAINT "data_logs_pkey" PRIMARY KEY ("id")
+);
