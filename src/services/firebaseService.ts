@@ -6,21 +6,20 @@ import { ServiceAccount } from "firebase-admin/app";
 let serviceAccount: string | ServiceAccount;
 
 // 1. Check if we are in production (on Vercel)
-if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
-    // We are in production: decode the Base64 string
-    console.log("Loading Firebase credentials from environment variable.");
-    const decodedString = Buffer.from(
-        process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
-        'base64'
-    ).toString('utf8');
-    serviceAccount = JSON.parse(decodedString) as ServiceAccount;
+if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+
+    // We are in production: parse the JSON string directly
+    console.log("Loading Firebase credentials from JSON environment variable.");
+
+    // NO MORE BASE64: We just parse the text from the variable
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON) as ServiceAccount;
 
 } else {
     // We are in local development: use the file path
     console.log("Loading Firebase credentials from local file.");
     serviceAccount = path.join(
         __dirname,
-        "../config/firebase_config.json" // Using your local path
+        "../config/firebase_config.json" // Your local path
     );
 }
 
