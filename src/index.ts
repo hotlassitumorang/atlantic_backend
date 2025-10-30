@@ -1,28 +1,24 @@
 import express from "express";
-// ❗️ Use the standard import if you fixed the previous error
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import dotenv from "dotenv";
-import logRoutes from "./routes/logRouter"; // 1. Import your new router
+import logRouter from "./routes/logRouter";
 
 dotenv.config();
-// const prisma = new PrismaClient(); // You can remove this, it's in the controller
 const app = express();
 
 app.use(cors());
-app.use(express.json()); // This is crucial for reading req.body
+app.use(express.json());
 
-// --- 2. Use the new router ---
-// All requests to /api/logs will be handled by logRoutes
-app.use("/api/logs", logRoutes);
+// --- Your Routes ---
+app.use("/api/logs", logRouter);
 
 app.get("/", (req, res) => {
     res.send("🚀 Express + Prisma + TypeScript backend running!");
 });
 
-// You can keep this route for testing
 app.get("/users", async (req, res) => {
-    const prisma = new PrismaClient(); // Or keep the instance up top
+    const prisma = new PrismaClient();
     try {
         const users = await prisma.user.findMany();
         res.json(users);
@@ -31,5 +27,10 @@ app.get("/users", async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ❗️ COMMENT OUT OR DELETE THIS BLOCK ❗️
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+// ✅ ADD THIS LINE AT THE VERY BOTTOM
+export default app;
