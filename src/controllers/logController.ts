@@ -26,8 +26,7 @@ export const createDataLog = async (req: Request, res: Response) => {
         const data = req.body as DataLogPayload;
 
         // --- 1. Save ALL data to Supabase (PostgreSQL) ---
-        // Prisma maps our camelCase 'water_temperature' to 'water_temperature'
-        // in the database automatically.
+        // Prisma maps our camelCase keys to database snake_case columns
         const newLog = await prisma.dataLog.create({
             data: {
                 voltage: data.voltage,
@@ -41,9 +40,16 @@ export const createDataLog = async (req: Request, res: Response) => {
             },
         });
 
-        // --- 2. Send SPECIFIC data to Firebase RTDB ---
+        // --- 2. Send REALTIME data to Firebase RTDB ---
+        // *** FIX: Added voltage, current, and power ***
         await updateFirebaseRealtimeData({
+            // PZEM Sensors
+            voltage: data.voltage,
+            current: data.current,
+            power: data.power,
             energy: data.energy,
+
+            // Plant Sensors
             water_temperature: data.water_temperature,
             humidity: data.humidity,
             ph: data.ph,

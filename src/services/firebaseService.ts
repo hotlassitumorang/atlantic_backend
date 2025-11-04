@@ -41,13 +41,18 @@ try {
 
 // This interface defines the data we'll send to Firebase
 export interface FirebaseSensorData {
+    // PZEM Sensors
+    voltage: number;
+    current: number;
+    power: number;
     energy: number;
+
+    // Plant Sensors
     water_temperature: number;
     humidity: number;
     ph: number;
     nutrient_ppm: number;
 }
-
 /**
  * Updates the latest sensor readings in Firebase Realtime Database.
  * @param data - The sensor data to update.

@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import dotenv from "dotenv";
 import logRouter from "./routes/logRouter";
+import dataRouter from "./routes/dataRouter";
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // --- Your Routes ---
 app.use("/api/logs", logRouter);
+app.use("/api/data", dataRouter);
 
 app.get("/", (req, res) => {
     res.send("🚀 Express + Prisma + TypeScript backend running!");
@@ -28,9 +30,9 @@ app.get("/users", async (req, res) => {
 });
 
 // ❗️ COMMENT OUT OR DELETE THIS BLOCK ❗️
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
-// ✅ ADD THIS LINE AT THE VERY BOTTOM
-export default app;
+// // ✅ ADD THIS LINE AT THE VERY BOTTOM
+// export default app;
