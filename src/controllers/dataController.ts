@@ -45,3 +45,18 @@ export const getLogAverages = async (req: Request, res: Response) => {
         res.status(500).json({ error: "An error occurred while fetching averages." });
     }
 };
+
+export const getAllData = async (req: Request, res: Response) => {
+    try {
+        const dataLogs = await prisma.dataLog.findMany({
+            orderBy: {
+                createdAt: 'desc', // sorts newest first
+            },
+        });
+
+        res.status(200).json(dataLogs);
+    } catch (error) {
+        console.error("Failed to get all data logs:", error);
+        res.status(500).json({ error: "An error occurred while fetching data logs." });
+    }
+};
